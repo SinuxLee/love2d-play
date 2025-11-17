@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "path": "demo1"
+    },
+    {
+      "path": "demo2"
+    },
+    {
+      "path": "water"
+    }
+  ],
+  "extensions": {
+    "recommendations": [
+      "janw.love-launcher",
+      "sumneko.lua",
+      "tomblind.local-lua-debugger-vscode"
+    ]
+  }
+}
+

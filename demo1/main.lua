@@ -1,3 +1,7 @@
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+  require("lldebugger").start()
+end
+
 -- run only once
 function love.load()
     num = 0
@@ -6,10 +10,10 @@ function love.load()
 
     local f = love.graphics.newFont(12)
     love.graphics.setFont(f)
-    love.graphics.setColor(255,0,0,255)
+    love.graphics.setColor(255, 0, 0, 255)
     -- love.graphics.setBackgroundColor(255,255,255)
 end
- 
+
 function love.draw()
     love.graphics.draw(whale, imgx, imgy)
     love.graphics.print("Hello World!", 400, 300)
@@ -18,16 +22,16 @@ end
 
 function love.update(dt)
     if love.keyboard.isDown("up") then
-       num = num + 100 * dt -- this would increment num by 100 per second
+        num = num + 100 * dt -- this would increment num by 100 per second
     end
- end
+end
 
- function love.mousepressed(x, y, button, istouch)
+function love.mousepressed(x, y, button, istouch)
     if button == 1 then
-       imgx = x -- move image to where mouse clicked
-       imgy = y
+        imgx = x -- move image to where mouse clicked
+        imgy = y
     end
- end
+end
 
 function love.quit()
     print("Thanks for playing! Come back soon!")

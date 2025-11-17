@@ -1,0 +1,26 @@
+{
+    "Lua.workspace.library": [
+        "${addons}/love2d/module/library"
+    ],
+    "Lua.runtime.special": {
+        "love.filesystem.load": "loadfile"
+    },
+    "Lua.runtime.builtin": {
+        "basic": "default",
+        "table": "default",
+        "string": "default"
+    },
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.diagnostics.globals": [
+        "love"
+    ],
+    "Lua.diagnostics.enable": true,
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ],
+    "Lua.format.defaultConfig": {
+        "indent_style": "space",
+        "indent_size": "2"
+    }
+}
