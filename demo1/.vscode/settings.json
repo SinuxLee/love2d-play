@@ -15,6 +15,9 @@
     "Lua.diagnostics.globals": [
         "love"
     ],
+    "Lua.hint.enable": true,
+    "Lua.hint.paramType": true,
+    "Lua.hint.setType": true,
     "Lua.diagnostics.enable": true,
     "Lua.diagnostics.disable": [
         "lowercase-global"

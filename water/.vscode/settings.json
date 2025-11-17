@@ -12,7 +12,18 @@
     },
     "Lua.workspace.checkThirdParty": false,
     "Lua.runtime.version": "LuaJIT",
-    "Lua.diagnostics.globals": ["love"],
+    "Lua.diagnostics.globals": [
+        "love"
+    ],
+    "Lua.hint.enable": true,
+    "Lua.hint.paramType": true,
+    "Lua.hint.setType": true,
     "Lua.diagnostics.enable": true,
-    "Lua.diagnostics.disable": ["lowercase-global"],
+    "Lua.diagnostics.disable": [
+        "lowercase-global"
+    ],
+    "Lua.format.defaultConfig": {
+        "indent_style": "space",
+        "indent_size": "2"
+    }
 }
