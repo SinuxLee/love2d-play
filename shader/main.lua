@@ -1,10 +1,10 @@
-local camera = {}
-camera.x = 0
-camera.y = 0
-camera.scaleX = 1 --scale比例
-camera.scaleY = 1
-camera.rotation = 0  --rotation旋转
-
+local camera = {
+  x = 0,
+  y = 0,
+  scaleX = 1,   --scale比例
+  scaleY = 1,
+  rotation = 0, --rotation旋转
+}
 local shader = {}
 
 function camera:set()
@@ -44,21 +44,21 @@ function camera:setScale(sx, sy)
 end
 
 function camera:mousePosition()
-    return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
-  end
+  return love.mouse.getX() * self.scaleX + self.x, love.mouse.getY() * self.scaleY + self.y
+end
 
 function love.load()
-    shader = love.graphics.newShader("shader.fs")
-    camera:scale(1.2)
+  shader = love.graphics.newShader("shader.fs")
+  camera:scale(1.2)
 end
 
 -- 在 update 之后调用，只用于绘图
 function love.draw()
-    camera:set()
+  camera:set()
 
-    love.graphics.setShader(shader)
-    love.graphics.rectangle("fill", 0, 0, 100, 100)
-    love.graphics.setShader()
+  love.graphics.setShader(shader)
+  love.graphics.rectangle("fill", 0, 0, 100, 100)
+  love.graphics.setShader()
 
-    camera:unset()
+  camera:unset()
 end

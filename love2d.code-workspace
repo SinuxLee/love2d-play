@@ -4,10 +4,13 @@
       "path": "demo1"
     },
     {
-      "path": "demo2"
+      "path": "water"
     },
     {
-      "path": "water"
+      "path": "blocks"
+    },
+    {
+      "path": "shader"
     }
   ],
   "extensions": {

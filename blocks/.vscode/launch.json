@@ -4,7 +4,7 @@
         {
             "type": "lua-local",
             "request": "launch",
-            "name": "Debug Love2D",
+            "name": "Debug",
             "program": {
                 "command": "love"
             },
