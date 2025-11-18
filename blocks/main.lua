@@ -4,6 +4,14 @@ end
 
 local gl = love.graphics
 
+---@enum Direction
+local Direction = {
+    UP = 1,
+    DOWN = 2,
+    LEFT = 3,
+    RIGHT = 4
+}
+
 ---@alias Cell string               -- 单格字符
 ---@alias Row  Cell[]               -- 一行
 ---@alias Shape Row[]               -- 一个4x4形状
@@ -389,11 +397,11 @@ end
 ---@param key string
 function love.keypressed(key)
     switch(key, {
-        x       = handleKeyX,
-        z       = handleKeyZ,
-        c       = handleKeyC,
-        left    = handleKeyLeft,
-        right   = handleKeyRight,
+        x       = handleKeyX,     -- Rotate clockwise
+        z       = handleKeyZ,     -- Rotate counterclockwise
+        c       = handleKeyC,     -- Drop
+        left    = handleKeyLeft,  -- Move left
+        right   = handleKeyRight, -- Move right
         default = function() print("unknown key") end
     })
 end
@@ -425,5 +433,4 @@ function love.draw()
             end
         end
     end
-
 end
