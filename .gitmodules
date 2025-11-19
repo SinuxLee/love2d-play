@@ -1,0 +1,9 @@
+[submodule "template/libs/hump"]
+	path = template/libs/hump
+	url = https://github.com/vrld/hump.git
+[submodule "template/libs/sti"]
+	path = template/libs/sti
+	url = https://github.com/karai17/Simple-Tiled-Implementation
+[submodule "template/libs/lf"]
+	path = template/libs/lf
+	url = https://github.com/linux-man/LoveFrames.git
