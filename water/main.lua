@@ -1,19 +1,15 @@
--- main.lua
 -- 简单粒子水模拟（可交互：按住鼠标左键倒水）
--- 运行：love .
 
 local particles = {}
 local pool = {}
 local maxParticles = 2000
 local GRAVITY = 900                                      -- 像素/s^2
-local R = 3                                              -- 粒子半径
+local R = 1                                              -- 粒子半径
 local RESTITUTION = 0.0                                  -- 碰撞弹性
 local VISCOSITY = 0.02                                   -- 邻近速度混合，模拟粘性
 local SPAWN_RATE = 600                                   -- 每秒粒子数（按住鼠标）
 local container = { x = 200, y = 200, w = 400, h = 260 } -- 容器（可改）
-
--- 池化
-for i = 1, maxParticles do pool[i] = { active = false } end
+local lastSpawn = 0
 
 local function spawnParticle(x, y, vx, vy)
     local p = nil
@@ -23,7 +19,9 @@ local function spawnParticle(x, y, vx, vy)
             break
         end
     end
+
     if not p then return end
+
     p.active = true
     p.x = x
     p.y = y
@@ -35,9 +33,10 @@ local function spawnParticle(x, y, vx, vy)
     particles[#particles + 1] = p
 end
 
-local lastSpawn = 0
-
 function love.load()
+    for i = 1, maxParticles do
+        pool[i] = { active = false }
+    end
     love.graphics.setBackgroundColor(0.12, 0.12, 0.12)
     love.window.setMode(800, 600)
 end

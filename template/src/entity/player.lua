@@ -19,15 +19,28 @@ end
 
 ---@param dt number
 function Player:update(dt)
-    if input.up then self.y = self.y - self.speed * dt end
-    if input.down then self.y = self.y + self.speed * dt end
-    if input.left then self.x = self.x - self.speed * dt end
-    if input.right then self.x = self.x + self.speed * dt end
+    local dx, dy = 0, 0
+    if input.left then dx = dx - 1 end
+    if input.right then dx = dx + 1 end
+    if input.up then dy = dy - 1 end
+    if input.down then dy = dy + 1 end
+
+    -- 归一化方向向量，确保斜向移动时速度保持一致
+    if dx ~= 0 or dy ~= 0 then
+        local length = math.sqrt(dx * dx + dy * dy)
+        dx = dx / length
+        dy = dy / length
+
+        self.x = self.x + dx * self.speed * dt
+        self.y = self.y + dy * self.speed * dt
+    end
 end
 
 function Player:draw()
-    love.graphics.setColor(1, 100, 1)
-    love.graphics.rectangle("fill", self.x-10, self.y-10, self.size, self.size)
+    love.graphics.setColor(0.1, 0.39, 0.1)
+    love.graphics.rectangle("fill",
+        self.x - self.size, self.y - self.size,
+        self.size, self.size)
 end
 
 return Player

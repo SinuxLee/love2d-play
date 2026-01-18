@@ -1,6 +1,7 @@
 {
     "Lua.workspace.library": [
-        "${addons}/love2d/module/library"
+        "${addons}/love2d/module/library",
+        "${addons}/lldebugger/module/library"
     ],
     "Lua.runtime.special": {
         "love.filesystem.load": "loadfile"
