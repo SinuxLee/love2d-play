@@ -1,4 +1,4 @@
-local Gamestate = require "libs.hump.gamestate"
+local Gamestate = require "hump.gamestate"
 local game      = require "src.scene.game"
 
 local menu      = {}

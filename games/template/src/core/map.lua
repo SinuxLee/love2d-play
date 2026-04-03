@@ -1,4 +1,4 @@
-local sti = require "libs.sti.sti"
+local sti = require "sti.sti"
 local M = {}
 
 function M.load(mapfile)

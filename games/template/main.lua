@@ -1,4 +1,4 @@
-local game_state = require "libs.hump.gamestate"
+local game_state = require "hump.gamestate"
 local timer     = require "src.core.timer"
 local menu      = require "src.scene.menu"
 

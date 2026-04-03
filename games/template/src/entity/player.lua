@@ -1,4 +1,4 @@
-local Class = require "libs.hump.class"
+local Class = require "hump.class"
 local input = require "src.core.input"
 
 ---@class entity.Player
