@@ -1,8 +1,10 @@
--- Monorepo path setup: make vendor/ and shared/ accessible via require()
+-- Monorepo path setup: make vendor/, shared/, and src/ accessible via require()
 do
     local source = love.filesystem.getSource()
     local root = source .. "/../../"
-    package.path = root .. "vendor/?.lua;"
+    package.path = source .. "/src/?.lua;"
+        .. source .. "/src/?/init.lua;"
+        .. root .. "vendor/?.lua;"
         .. root .. "vendor/?/init.lua;"
         .. root .. "shared/?.lua;"
         .. root .. "shared/?/init.lua;"

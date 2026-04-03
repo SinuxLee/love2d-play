@@ -16,7 +16,9 @@ cat > "$GAME_DIR/conf.lua" << 'CONF'
 do
     local source = love.filesystem.getSource()
     local root = source .. "/../../"
-    package.path = root .. "vendor/?.lua;"
+    package.path = source .. "/src/?.lua;"
+        .. source .. "/src/?/init.lua;"
+        .. root .. "vendor/?.lua;"
         .. root .. "vendor/?/init.lua;"
         .. root .. "shared/?.lua;"
         .. root .. "shared/?/init.lua;"

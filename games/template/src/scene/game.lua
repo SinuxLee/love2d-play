@@ -1,7 +1,7 @@
-local camera = require "src.core.camera"
-local input = require "src.core.input"
-local Player = require("src.entity.player")
-local Enemy = require("src.entity.enemy")
+local camera = require "core.camera"
+local input = require "core.input"
+local Player = require("entity.player")
+local Enemy = require("entity.enemy")
 
 ---@class scene.Game
 ---@field player entity.Player

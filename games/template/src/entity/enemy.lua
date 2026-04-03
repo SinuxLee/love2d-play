@@ -1,5 +1,5 @@
 local Class = require "hump.class"
-local input = require "src.core.input"
+local input = require "core.input"
 
 ---@class entity.Enemy
 ---@field x integer

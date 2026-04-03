@@ -1,6 +1,6 @@
 local game_state = require "hump.gamestate"
-local timer     = require "src.core.timer"
-local menu      = require "src.scene.menu"
+local timer     = require "core.timer"
+local menu      = require "scene.menu"
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest")

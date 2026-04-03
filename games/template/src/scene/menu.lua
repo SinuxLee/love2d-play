@@ -1,5 +1,5 @@
 local Gamestate = require "hump.gamestate"
-local game      = require "src.scene.game"
+local game      = require "scene.game"
 
 local menu      = {}
 
