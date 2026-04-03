@@ -1,3 +1,15 @@
+do
+    local source = love.filesystem.getSource()
+    local root = source .. "/../../"
+    package.path = source .. "/src/?.lua;"
+        .. source .. "/src/?/init.lua;"
+        .. root .. "vendor/?.lua;"
+        .. root .. "vendor/?/init.lua;"
+        .. root .. "shared/?.lua;"
+        .. root .. "shared/?/init.lua;"
+        .. package.path
+end
+
 function love.conf(t)
     t.identity = nil                    -- The name of the save directory (string)
     t.appendidentity = false            -- Search files in source directory before save directory (boolean)
