@@ -1,19 +1,32 @@
 {
   "folders": [
     {
-      "path": "demo1"
+      "name": "blocks",
+      "path": "games/blocks"
     },
     {
-      "path": "water"
+      "name": "demo1",
+      "path": "games/demo1"
     },
     {
-      "path": "blocks"
+      "name": "shader",
+      "path": "games/shader"
     },
     {
-      "path": "shader"
+      "name": "water",
+      "path": "games/water"
     },
     {
-      "path": "template"
+      "name": "template",
+      "path": "games/template"
+    },
+    {
+      "name": "vendor",
+      "path": "vendor"
+    },
+    {
+      "name": "shared",
+      "path": "shared"
     }
   ],
   "extensions": {
@@ -22,6 +35,37 @@
       "sumneko.lua",
       "tomblind.local-lua-debugger-vscode"
     ]
+  },
+  "settings": {
+    "Lua.workspace.library": [
+      "${addons}/love2d/module/library",
+      "${addons}/lldebugger/module/library",
+      "../../vendor",
+      "../../shared"
+    ],
+    "Lua.runtime.special": {
+      "love.filesystem.load": "loadfile"
+    },
+    "Lua.runtime.builtin": {
+      "basic": "default",
+      "table": "default",
+      "string": "default"
+    },
+    "Lua.workspace.checkThirdParty": false,
+    "Lua.runtime.version": "LuaJIT",
+    "Lua.diagnostics.globals": [
+      "love"
+    ],
+    "Lua.hint.enable": true,
+    "Lua.hint.paramType": true,
+    "Lua.hint.setType": true,
+    "Lua.diagnostics.enable": true,
+    "Lua.diagnostics.disable": [
+      "lowercase-global"
+    ],
+    "Lua.format.defaultConfig": {
+      "indent_style": "space",
+      "indent_size": "2"
+    }
   }
 }
-
