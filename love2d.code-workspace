@@ -27,6 +27,9 @@
     {
       "name": "shared",
       "path": "shared"
+    },
+    {
+      "path": "games/camera"
     }
   ],
   "extensions": {

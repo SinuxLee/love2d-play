@@ -1,6 +1,6 @@
 -- games/physics-testbed/tests/test_camera.lua
 local t = require "testing"
-local Camera = require "camera"
+local Camera = require "games.camera.src.camera"
 
 t.describe("Camera", function()
     t.describe("new", function()
