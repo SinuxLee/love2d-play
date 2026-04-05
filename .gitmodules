@@ -10,3 +10,6 @@
 [submodule "vendor/suit"]
 	path = vendor/suit
 	url = https://github.com/vrld/suit.git
+[submodule "vendor/lume"]
+	path = vendor/lume
+	url = https://github.com/rxi/lume
