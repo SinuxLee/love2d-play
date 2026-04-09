@@ -10,3 +10,27 @@
 [submodule "vendor/suit"]
 	path = vendor/suit
 	url = https://github.com/vrld/suit.git
+[submodule "vendor/baton"]
+	path = vendor/baton
+	url = https://github.com/tesselode/baton.git
+[submodule "vendor/bump"]
+	path = vendor/bump
+	url = https://github.com/kikito/bump.lua.git
+[submodule "vendor/anim8"]
+	path = vendor/anim8
+	url = https://github.com/kikito/anim8.git
+[submodule "vendor/moonshine"]
+	path = vendor/moonshine
+	url = https://github.com/vrld/moonshine.git
+[submodule "vendor/bitser"]
+	path = vendor/bitser
+	url = https://github.com/gvx/bitser.git
+[submodule "vendor/tiny-ecs"]
+	path = vendor/tiny-ecs
+	url = https://github.com/bakpakin/tiny-ecs.git
+[submodule "vendor/lurker"]
+	path = vendor/lurker
+	url = https://github.com/rxi/lurker.git
+[submodule "vendor/lume"]
+	path = vendor/lume
+	url = https://github.com/rxi/lume.git
