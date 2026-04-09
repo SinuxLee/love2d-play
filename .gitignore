@@ -161,4 +161,10 @@ $RECYCLE.BIN/
 
 ### Project ###
 # Build output
+release/
 dist/
+
+.claude/settings.local.json
+*.csv
+*.pdf
+logs/
