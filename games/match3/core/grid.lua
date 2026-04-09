@@ -54,10 +54,14 @@ function Grid.init(numGemTypes, gridSize)
     for attempt = 1, 50 do
         if attempt == 1 then math.randomseed(os.time()) end
         Grid.cells = {}
+
         for row = 1, Grid.size do
             Grid.cells[row] = {}
+
             for col = 1, Grid.size do
                 local excluded = {}
+
+                -- 防止横向三连
                 if col >= 3 then
                     local t1 = Grid.cells[row][col - 1] and Grid.cells[row][col - 1].type
                     local t2 = Grid.cells[row][col - 2] and Grid.cells[row][col - 2].type
@@ -65,6 +69,8 @@ function Grid.init(numGemTypes, gridSize)
                         excluded[t1] = true
                     end
                 end
+
+                -- 防止纵向三连
                 if row >= 3 then
                     local t1 = Grid.cells[row - 1] and Grid.cells[row - 1][col] and Grid.cells[row - 1][col].type
                     local t2 = Grid.cells[row - 2] and Grid.cells[row - 2][col] and Grid.cells[row - 2][col].type
@@ -72,9 +78,12 @@ function Grid.init(numGemTypes, gridSize)
                         excluded[t1] = true
                     end
                 end
+
+                -- 在当前格子放置宝石
                 Grid.cells[row][col] = Gem.new(randomType(excluded), row, col)
             end
         end
+
         if Grid.hasValidMoves() then return end
     end
 end
@@ -88,6 +97,7 @@ function Grid.placeInitialSpecials(count)
     for row = 1, Grid.size do
         for col = 1, Grid.size do
             if placed >= count then return end
+
             -- Spread evenly: pick cells based on hash
             local hash = (row * 7 + col * 13) % (Grid.size * Grid.size)
             if hash < count * 3 then
@@ -97,6 +107,7 @@ function Grid.placeInitialSpecials(count)
                     placed = placed + 1
                 end
             end
+
         end
     end
 end
@@ -110,6 +121,7 @@ function Grid.swap(r1, c1, r2, c2)
     local gem2 = Grid.cells[r2][c2]
     Grid.cells[r1][c1] = gem2
     Grid.cells[r2][c2] = gem1
+
     gem1.row, gem1.col = r2, c2
     gem2.row, gem2.col = r1, c1
     gem1.targetX, gem1.targetY = Utils.gridToPixel(r2, c2)
@@ -131,6 +143,7 @@ function Grid.animateSwap(r1, c1, r2, c2, onComplete)
             onComplete()
         end
     end
+
     Tweens.add(gem1, "x", gem1.targetX, Utils.SWAP_DURATION, "easeOutQuad", checkDone)
     Tweens.add(gem1, "y", gem1.targetY, Utils.SWAP_DURATION, "easeOutQuad", checkDone)
     Tweens.add(gem2, "x", gem2.targetX, Utils.SWAP_DURATION, "easeOutQuad", checkDone)
@@ -162,11 +175,13 @@ function Grid.findMatches(swapRow, swapCol)
     local hRuns = {}
     for row = 1, SIZE do
         local start = 1
+
         for col = 2, SIZE + 1 do
             local sameType = col <= SIZE
                 and Grid.cells[row][col]
                 and Grid.cells[row][start]
                 and Grid.cells[row][col].type == Grid.cells[row][start].type
+
             if not sameType then
                 local len = col - start
                 if len >= 3 then
@@ -238,6 +253,7 @@ function Grid.findMatches(swapRow, swapCol)
                                 special = "wrapped", gemType = hRun.type
                             })
                         end
+
                         for _, g in ipairs(hRun.gems) do usedForLT[g] = true; matched[g] = true end
                         for _, g in ipairs(vRun.gems) do usedForLT[g] = true; matched[g] = true end
                     end
@@ -663,20 +679,26 @@ local function checkMatchAt(row, col)
     while left > 1 and Grid.cells[row][left - 1].type == gemType do
         left = left - 1
     end
+
     local right = col
     while right < SIZE and Grid.cells[row][right + 1].type == gemType do
         right = right + 1
     end
+
+    -- 横向三个以上相同
     if right - left + 1 >= 3 then return true end
 
     local top = row
     while top > 1 and Grid.cells[top - 1][col].type == gemType do
         top = top - 1
     end
+
     local bottom = row
     while bottom < SIZE and Grid.cells[bottom + 1][col].type == gemType do
         bottom = bottom + 1
     end
+
+    -- 纵向三个以上相同
     if bottom - top + 1 >= 3 then return true end
 
     return false
@@ -685,32 +707,41 @@ end
 ---@return boolean
 function Grid.hasValidMoves()
     local SIZE = Grid.size
+
     for row = 1, SIZE do
         for col = 1, SIZE do
             -- Color bombs are always swappable
             if Grid.cells[row][col].special == "color_bomb" then
                 return true
             end
+
             if col < SIZE then
                 if Grid.cells[row][col + 1].special == "color_bomb" then
                     return true
                 end
+
+                -- 交互推演，回退
                 Grid.swap(row, col, row, col + 1)
                 local valid = checkMatchAt(row, col) or checkMatchAt(row, col + 1)
                 Grid.swap(row, col, row, col + 1)
+
                 if valid then return true end
             end
+
             if row < SIZE then
                 if Grid.cells[row + 1][col].special == "color_bomb" then
                     return true
                 end
+
                 Grid.swap(row, col, row + 1, col)
                 local valid = checkMatchAt(row, col) or checkMatchAt(row + 1, col)
                 Grid.swap(row, col, row + 1, col)
+
                 if valid then return true end
             end
         end
     end
+
     return false
 end
 

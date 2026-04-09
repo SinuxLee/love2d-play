@@ -88,8 +88,10 @@ end
 ---@param h number
 function UI.panel(x, y, w, h)
     if not UI.initialized then return end
+
     love.graphics.setColor(0.05, 0.05, 0.12, 0.92)
     love.graphics.rectangle("fill", x, y, w, h, 6, 6)
+    
     love.graphics.setColor(0.3, 0.4, 0.6, 0.4)
     love.graphics.setLineWidth(1)
     love.graphics.rectangle("line", x, y, w, h, 6, 6)

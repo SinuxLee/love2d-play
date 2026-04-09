@@ -1,4 +1,4 @@
-.PHONY: run pack new update-submodules list test unit-test integration-test test-all
+.PHONY: run pack new update-submodules list test unit-test love-unit-test integration-test test-all
 
 LOVE_CMD ?= love
 ifeq ($(shell uname),Darwin)
@@ -47,6 +47,14 @@ ifndef GAME
 	$(error Usage: make unit-test GAME=<game_name>)
 endif
 	@$(LUA_CMD) shared/testing/runner.lua games/$(GAME)/tests games/$(GAME)/src
+
+# love-unit-test: runs unit tests via Love2D headless mode.
+# Use this on Windows where standalone luajit/lua is unavailable.
+love-unit-test:
+ifndef GAME
+	$(error Usage: make love-unit-test GAME=<game_name>)
+endif
+	@$(LOVE_CMD) shared/testing/unit_runner --game=$(GAME)
 
 integration-test:
 ifndef GAME
