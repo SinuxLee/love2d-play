@@ -34,3 +34,6 @@
 [submodule "vendor/lume"]
 	path = vendor/lume
 	url = https://github.com/rxi/lume.git
+[submodule "vendor/lua-msgpack"]
+	path = vendor/lua-msgpack
+	url = https://github.com/kengonakajima/lua-msgpack
