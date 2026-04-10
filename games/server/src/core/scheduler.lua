@@ -163,9 +163,20 @@ function Scheduler:tick(dt)
     -- 2. Resume services with pending work
     for _, svc in pairs(self.services) do
         if not svc.dead then
-            local has_work = #svc.mailbox > 0
-                or (svc.cosock and (#svc.cosock.rbuf > 0 or svc.cosock.closed))
-            if has_work then
+            local should_resume
+            if svc.waiting_session then
+                -- Service is mid-call(): only wake when matching reply arrives
+                for _, msg in ipairs(svc.mailbox) do
+                    if msg.type == "_reply_" and msg.session == svc.waiting_session then
+                        should_resume = true
+                        break
+                    end
+                end
+            else
+                should_resume = #svc.mailbox > 0
+                    or (svc.cosock and (#svc.cosock.rbuf > 0 or svc.cosock.closed))
+            end
+            if should_resume then
                 self:_resume(svc)
             end
         end
