@@ -19,14 +19,21 @@ end
 function Cosocket:poll()
     if self.closed then return end
 
+    -- 读（非阻塞）
     local data, err = self.sock:receive(8192)
     if data then
         self.rbuf = self.rbuf .. data
     elseif err ~= "timeout" then
+        -- 连接关闭：先尝试刷出剩余写缓冲，再标记关闭
+        if #self.wbuf > 0 then
+            self.sock:send(self.wbuf)
+            self.wbuf = ""
+        end
         self.closed = true
         return
     end
 
+    -- 写（flush wbuf）
     if #self.wbuf > 0 then
         local sent, serr = self.sock:send(self.wbuf)
         if sent then
