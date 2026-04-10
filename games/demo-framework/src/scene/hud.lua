@@ -1,27 +1,25 @@
 -- scene/hud.lua
 -- HUD overlay scene, running IN PARALLEL with play.lua.
+--
 -- Demonstrates:
 --   Parallel scenes (launched alongside play)
---   self.data    (reads score from shared data written by play)
---   self.tweens  (score pop animation)
+--   self:watch(key, fn)   – react to shared data changes (auto-cleaned on stop)
+--   self.tweens           – score pop animation triggered by watcher
 
 local Scene = require "framework.scene"
 local HudScene = Scene:extend("HudScene")
 
 function HudScene:create()
-    self._displayScore = 0  -- animated score counter
+    self._displayScore = self.data.score or 0
     self._popScale     = 1.0
-end
+    self._popping      = false
 
-function HudScene:update(dt)
-    -- Smoothly animate the displayed score toward the real score
-    local target = self.data.score or 0
-    if self._displayScore < target then
-        self._displayScore = math.min(target,
-            self._displayScore + math.max(1, (target - self._displayScore) * 12 * dt))
-        -- Trigger pop when score changes
-        if not self._popping then
-            self._popping = true
+    -- Watch score changes: trigger pop animation whenever score increases.
+    -- The watcher is automatically removed when this scene is stopped.
+    self:watch("score", function(new, _old)
+        -- Snap display toward new value immediately (smooth lerp in update)
+        if new > self._displayScore and not self._popping then
+            self._popping  = true
             self._popScale = 1.0
             self.tweens:tween(0.12, self, { _popScale = 1.35 }, "out-cubic",
                 function()
@@ -29,20 +27,25 @@ function HudScene:update(dt)
                         function() self._popping = false end)
                 end)
         end
+    end)
+end
+
+function HudScene:update(dt)
+    -- Smoothly animate the displayed score toward the real score
+    local target = self.data.score or 0
+    if self._displayScore ~= target then
+        self._displayScore = math.min(target,
+            self._displayScore + math.max(1, (target - self._displayScore) * 12 * dt))
     end
 end
 
 function HudScene:draw()
-    local W  = love.graphics.getWidth()
+    local W     = love.graphics.getWidth()
     local score = math.floor(self._displayScore)
     local total = self.data.totalCoins or 0
-    local collected = total - (function()
-        local n = 0
-        -- We can't access PlayScene internals directly; use data instead
-        -- play.lua stores alive coin count via self.data if needed.
-        -- For now approximate from score
-        return math.max(0, total - math.floor(score / 100))
-    end)()
+
+    -- Approximate coins collected from score (100 pts per coin)
+    local collected = math.min(total, math.floor(score / 100))
 
     -- ── Score panel (top-left) ────────────────────────────────────────────────
     love.graphics.setColor(0, 0, 0, 0.5)

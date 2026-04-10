@@ -166,7 +166,7 @@ function PlayScene:update(dt)
 
             -- Brief camera shake via tweens
             local ox, oy = self.cameras:position()
-            self.tweens:tween(0.08, {}, { t = 1 }, "linear", function()
+            self.tweens:tween(0.08, { t = 0 }, { t = 1 }, "linear", function()
                 self.cameras:lookAt(ox + math.random(-4, 4), oy + math.random(-4, 4))
                 self.time:after(0.08, function()
                     self.cameras:lookAt(ox, oy)

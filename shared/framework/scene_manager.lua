@@ -27,6 +27,7 @@ local Timer        = require "hump.timer"
 local Camera       = require "hump.camera"
 local EventEmitter = require "framework.event_emitter"
 local InputManager = require "framework.input_manager"
+local Observable   = require "framework.observable"
 
 -- Lazy-load suit (may not be available in unit tests)
 local suit
@@ -87,7 +88,7 @@ function SceneManager.new(registry, config)
         _scenes     = {},         -- ordered list of scene entries (render order)
         _byKey      = {},         -- key → entry (for fast lookup)
         _config     = config or {},
-        _sharedData = {},         -- global data shared across all scenes
+        _sharedData = Observable.new(),  -- global observable data shared across all scenes
     }, SceneManager)
 end
 
@@ -105,6 +106,25 @@ local function injectSubsystems(sm, instance)
     instance.input   = InputManager.new(cfg.input)
     instance.scene   = sm
     instance.data    = sm._sharedData
+
+    -- Scene-bound watch helper: auto-unregisters all watchers on scene stop
+    instance._dataWatchHandles = {}
+    local data = sm._sharedData
+    instance.watch = function(_, key, fn)
+        data:watch(key, fn)
+        table.insert(instance._dataWatchHandles, { key = key, fn = fn })
+        return fn
+    end
+    instance.unwatch = function(_, key, fn)
+        data:unwatch(key, fn)
+        for i = #instance._dataWatchHandles, 1, -1 do
+            local h = instance._dataWatchHandles[i]
+            if h.key == key and h.fn == fn then
+                table.remove(instance._dataWatchHandles, i)
+                break
+            end
+        end
+    end
 
     if suit then
         instance.ui = suit.new()
@@ -168,6 +188,13 @@ local function applyTransition(entry, newStatus, data)
         if inst.time   then inst.time:clear()   end
         if inst.tweens then inst.tweens:clear() end
         if inst.events then inst.events:clear() end
+        -- Auto-unregister all data watchers this scene registered
+        if inst._dataWatchHandles and inst.data then
+            for _, h in ipairs(inst._dataWatchHandles) do
+                inst.data:unwatch(h.key, h.fn)
+            end
+            inst._dataWatchHandles = {}
+        end
     end
 end
 
