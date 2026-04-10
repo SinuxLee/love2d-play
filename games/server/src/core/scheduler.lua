@@ -73,15 +73,15 @@ function Scheduler:_make_ctx(svc)
             if msg.type == "_reply_" and msg.session == session then
                 table.remove(svc.mailbox, i)
                 svc.waiting_session = nil
-                return msg.result
+                return unpack(msg.result)
             end
         end
         svc.waiting_session = nil
         return nil
     end
 
-    function ctx:reply(session, result)
-        sched:_deliver_reply(session, result)
+    function ctx:reply(session, ...)
+        sched:_deliver_reply(session, ...)
     end
 
     function ctx:bind_socket(sock)
@@ -125,7 +125,8 @@ function Scheduler:_raw_send(addr, type, data, session)
     table.insert(svc.mailbox, {type = type, data = data, session = session})
 end
 
-function Scheduler:_deliver_reply(session, result)
+function Scheduler:_deliver_reply(session, ...)
+    local result = {...}
     for _, svc in pairs(self.services) do
         if svc.waiting_session == session then
             table.insert(svc.mailbox, {type = "_reply_", session = session, result = result})
