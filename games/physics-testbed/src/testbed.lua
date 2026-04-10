@@ -1,4 +1,4 @@
-local Camera = require "games.camera.src.camera"
+local Camera = require "camera"
 local debug_draw = require "debug_draw"
 local debug_panel = require "debug_panel"
 local scenes = require "scenes"

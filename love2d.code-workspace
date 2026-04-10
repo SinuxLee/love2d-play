@@ -30,6 +30,12 @@
     },
     {
       "path": "games/camera"
+    },
+    {
+      "path": "games/particle"
+    },
+    {
+      "path": "games/physics-testbed"
     }
   ],
   "extensions": {
