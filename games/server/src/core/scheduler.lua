@@ -65,8 +65,8 @@ function Scheduler:_make_ctx(svc)
 
     function ctx:call(addr, type, data)
         local session = sched:_alloc_session()
+        svc.waiting_session = session   -- set BEFORE sending, so reply can find us
         sched:_raw_send(addr, type, data, session)
-        svc.waiting_session = session
         coroutine.yield()
         -- After resume: find the _reply_ in mailbox
         for i, msg in ipairs(svc.mailbox) do
