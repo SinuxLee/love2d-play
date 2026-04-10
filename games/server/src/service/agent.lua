@@ -43,9 +43,13 @@ local function agent(ctx, opts)
                 player     = player,
                 agent_addr = ctx.addr,
             })
-            room_id = rid
-            send_to_client({type = "room_created", room_id = rid})
-            send_to_client({type = "room_joined", room_id = rid, players = players or {}})
+            if not info then
+                send_to_client({type = "error", message = players or "join failed"})
+            else
+                room_id = rid
+                send_to_client({type = "room_created", room_id = rid})
+                send_to_client({type = "room_joined", room_id = rid, players = players or {}})
+            end
 
         elseif t == "join_room" then
             if not player then
