@@ -1,8 +1,6 @@
 local protocol = require "core.protocol"
 local log      = require "core.log"
 
-local next_player_id = 1
-
 ---@param ctx table  scheduler context
 ---@param opts {sock:table, room_mgr_addr:integer, on_close:function|nil}
 local function agent(ctx, opts)
@@ -20,8 +18,7 @@ local function agent(ctx, opts)
         local t = msg.type
 
         if t == "login" then
-            player = {id = next_player_id, name = msg.name or ("Player" .. next_player_id)}
-            next_player_id = next_player_id + 1
+            player = {id = ctx.addr, name = msg.name or ("Player" .. ctx.addr)}
             send_to_client({type = "login_ok", player_id = player.id})
             log.info("player %d '%s' logged in (addr=%d)", player.id, player.name, ctx.addr)
 

@@ -44,6 +44,18 @@ function love.update(dt)
     end
 
     panel:set_rooms(rooms_cache)
+
+    -- Dispatch announce broadcast
+    if panel.announce_pending then
+        panel.announce_pending = nil
+        sched:spawn(function(ctx)
+            ctx:call(mgr_addr, "snapshot", {})
+            -- broadcast_except requires a room_id; a true server-wide broadcast
+            -- requires an agent registry service (not yet implemented).
+            -- The announce is already logged by panel.lua.
+            ctx:exit()
+        end)
+    end
 end
 
 function love.draw()

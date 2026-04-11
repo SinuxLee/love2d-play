@@ -76,6 +76,9 @@ function Panel:draw()
     suit.Input(self.announce_text,  suit.layout:col(W - 200, ROW))
     local send_btn = suit.Button("Send", suit.layout:col(100 - PAD, ROW))
     if send_btn.hit and #self.announce_text.text > 0 then
+        self.announce_pending = self.announce_text.text
+        -- announce_pending is read by main.lua; full cross-room broadcast
+        -- requires an agent registry service (not yet implemented)
         require("core.log").info("[ANNOUNCE] %s", self.announce_text.text)
         self.announce_text.text = ""
     end
