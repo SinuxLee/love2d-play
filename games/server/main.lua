@@ -2,6 +2,8 @@ local Scheduler = require "core.scheduler"
 local log       = require "core.log"
 local gate_fn   = require "service.gate"
 local room_mgr  = require "service.room_mgr"
+local Panel     = require "ui.panel"
+local suit      = require "suit"
 
 local sched      = Scheduler.new()
 local mgr_addr
@@ -10,6 +12,7 @@ local start_time
 local rooms_cache = {}
 local snapshot_timer = 0
 local SNAPSHOT_INTERVAL = 1.0
+local panel
 
 function love.load()
     start_time = love.timer.getTime()
@@ -23,6 +26,7 @@ function love.load()
     })
 
     log.info("server ready  mgr=%d  gate=%d  port=12345", mgr_addr, gate_addr)
+    panel = Panel.new(sched, start_time)
 end
 
 function love.update(dt)
@@ -38,43 +42,28 @@ function love.update(dt)
             ctx:exit()
         end)
     end
+
+    panel:set_rooms(rooms_cache)
 end
 
 function love.draw()
-    local uptime = love.timer.getTime() - start_time
+    panel:draw()
+end
 
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print(string.format(
-        "Game Server  |  port: 12345  |  services: %d  |  uptime: %.0fs",
-        sched:service_count(), uptime), 10, 10)
-
-    -- Room list
-    love.graphics.print("Rooms:", 10, 40)
-    if #rooms_cache == 0 then
-        love.graphics.print("  (none)", 10, 60)
-    else
-        for i, r in ipairs(rooms_cache) do
-            love.graphics.print(string.format("  [%d] %s  %d/%d",
-                r.id, r.name, r.count, r.max), 10, 40 + i * 20)
-        end
-    end
-
-    -- Recent log entries
-    local entries = log._entries()
-    local start_i = math.max(1, #entries - 15)
-    for i = start_i, #entries do
-        local e = entries[i]
-        if e.level == "ERROR" then
-            love.graphics.setColor(1, 0.3, 0.3)
-        elseif e.level == "WARN" then
-            love.graphics.setColor(1, 0.8, 0)
-        else
-            love.graphics.setColor(0.8, 0.8, 0.8)
-        end
-        love.graphics.print(string.format("[%s] %s", e.level, e.msg),
-            10, love.graphics.getHeight() - (#entries - i + 1) * 16 - 10)
-    end
-    love.graphics.setColor(1, 1, 1)
+function love.mousemoved(x, y, _dx, _dy)
+    suit.updateMouse(x, y)
+end
+function love.mousepressed(x, y, btn)
+    if btn == 1 then suit.updateMouse(x, y, true) end
+end
+function love.mousereleased(x, y, btn)
+    if btn == 1 then suit.updateMouse(x, y, false) end
+end
+function love.keypressed(key)
+    suit.keypressed(key)
+end
+function love.textinput(t)
+    suit.textinput(t)
 end
 
 function love.quit()
