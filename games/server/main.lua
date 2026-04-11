@@ -1,9 +1,10 @@
-local Scheduler = require "core.scheduler"
-local log       = require "core.log"
-local gate_fn   = require "service.gate"
-local room_mgr  = require "service.room_mgr"
-local Panel     = require "ui.panel"
-local suit      = require "suit"
+local Scheduler    = require "core.scheduler"
+local log          = require "core.log"
+local gate_fn      = require "service.gate"
+local room_mgr     = require "service.room_mgr"
+local test_client  = require "service.test_client"
+local Panel        = require "ui.panel"
+local suit         = require "suit"
 
 local sched      = Scheduler.new()
 local mgr_addr
@@ -44,6 +45,12 @@ function love.update(dt)
     end
 
     panel:set_rooms(rooms_cache)
+
+    -- Spawn test client on button click
+    if panel.spawn_test_client_pending then
+        panel.spawn_test_client_pending = nil
+        sched:spawn(test_client, {host = "127.0.0.1", port = 12345})
+    end
 
     -- Dispatch announce broadcast
     if panel.announce_pending then

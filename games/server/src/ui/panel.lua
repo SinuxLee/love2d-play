@@ -32,7 +32,7 @@ function Panel:draw()
     local uptime  = love.timer.getTime() - self.start_time
 
     local PAD  = 8
-    local ROW  = 22
+    local ROW  = 28
     local COL1 = PAD
     local COL2 = math.floor(W * 0.5) + PAD
     local HALF = math.floor(W * 0.5) - PAD * 2
@@ -62,12 +62,17 @@ function Panel:draw()
         end
     end
 
-    -- ── Right column: selected room detail ──────────────
+    -- ── Right column: selected room detail + test client ──
     suit.layout:reset(COL2, list_top, 4, 4)
     local title = self.selected_room
         and ("Room #" .. self.selected_room)
         or  "Select a room"
     suit.Label(title, {align = "left"}, suit.layout:row(HALF, ROW))
+
+    local connect_btn = suit.Button("Connect Test Client", suit.layout:row(HALF, ROW))
+    if connect_btn.hit then
+        self.spawn_test_client_pending = true
+    end
 
     -- ── Announce bar ────────────────────────────────────
     local ann_y = H - ROW * 2 - PAD * 4
@@ -84,10 +89,11 @@ function Panel:draw()
     end
 
     -- ── Log panel ───────────────────────────────────────
-    local log_y   = H - ROW * 1 - PAD * 2
     local n_lines = 4
+    local log_row = ROW - 2
+    local log_y   = H - log_row * n_lines - PAD * 2
     local start_i = math.max(1, #entries - n_lines + 1)
-    suit.layout:reset(COL1, log_y - (n_lines - 1) * (ROW - 4), 4, 2)
+    suit.layout:reset(COL1, log_y, 4, 2)
     for i = start_i, #entries do
         local e   = entries[i]
         local col = e.level == "ERROR" and {1, 0.3, 0.3, 1}
@@ -96,7 +102,7 @@ function Panel:draw()
         suit.Label(
             string.format("[%s] %s", e.level, e.msg),
             {align = "left", color = {normal = {fg = col}}},
-            suit.layout:row(W - PAD * 2, ROW - 4))
+            suit.layout:row(W - PAD * 2, log_row))
     end
 
     suit.draw()
